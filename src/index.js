@@ -15,15 +15,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Navbar />
-
-      <Switch>
-        <Route path="/test">
-          <p>Test2</p>
-        </Route>
-        <Route path="/">
-          <Viewer />
-        </Route>
-      </Switch>
+      <Viewer />
     </Router>
 
   </React.StrictMode>,

@@ -1,5 +1,6 @@
 .navbar {
     background-color: var(--color-header-bg);
+    height: 50px;
 }
 
 a {

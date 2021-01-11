@@ -2,18 +2,31 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 
+const SupportedFileTypes = {
+    "drc": 0, 
+    "ply": 1, 
+    "stl": 2
+};
+
 const GetFileTypeFromName = function(filename) {
-    return filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;
+    var type = filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;
+    return SupportedFileTypes[type];
 }
 
 const MeshLoader = function() {
-    this.dracoLoader = new DRACOLoader();
-    this.dracoLoader.setDecoderConfig( {type:"wasm"} )
-    this.dracoLoader.setDecoderPath( 'https://www.gstatic.com/draco/versioned/decoders/1.4.1/' );
-    this.dracoLoader.preload();
+    this.loaders = {};
 
-    this.plyLoader = new PLYLoader();
-    this.stlLoader = new STLLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderConfig( {type:"wasm"} )
+    dracoLoader.setDecoderPath( 'https://www.gstatic.com/draco/versioned/decoders/1.4.1/' );
+    dracoLoader.preload();
+    this.loaders[SupportedFileTypes.drc] = dracoLoader;
+
+    const plyLoader = new PLYLoader();
+    this.loaders[SupportedFileTypes.ply] = plyLoader;
+
+    const stlLoader = new STLLoader();
+    this.loaders[SupportedFileTypes.stl] = stlLoader;
 
     this.onLoad = null;
     this.onProgress = null;
@@ -21,20 +34,8 @@ const MeshLoader = function() {
 }
 
 MeshLoader.prototype.LoadURL = function(url, fileName) {
-    var loader = null;
-
     var fileType = GetFileTypeFromName(fileName);
-
-    if (fileType === "drc") {
-        loader = this.dracoLoader;
-    }
-    else if (fileType === "ply") {
-        loader = this.plyLoader;
-    }
-    else if (fileType === "stl") {
-        loader = this.stlLoader;
-    }
-
+    var loader = this.loaders[fileType];
     if (loader) {
         var onLoad = (geometry) => {
             if (this.onLoad) {
