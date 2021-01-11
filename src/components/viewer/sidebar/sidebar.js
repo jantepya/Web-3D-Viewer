@@ -15,29 +15,39 @@ export default class SideBar extends React.Component {
         super()
         this.sceneList = React.createRef();
         this.state = {
-            sceneItems: []
+            sceneObjects: []
         }
     }
 
-    removeFromSceneList = (uuid) => {
-        var sceneItems = [...this.state.sceneItems];
-        var index = sceneItems.findIndex((item) => item.uuid === uuid)
-        if (index !== -1) {
-            sceneItems.splice(index, 1);
-            this.setState({sceneItems: sceneItems});
-            this.props.onItemRemoved(uuid);
+    removeObjectsFromScene = (uuidsToRemove) => {
+        var sceneObjects = [...this.state.sceneObjects];
+
+        for (let uuid of uuidsToRemove) {
+            var index = sceneObjects.findIndex((object) => object.uuid === uuid)
+            if (index !== -1) {
+                sceneObjects.splice(index, 1);
+            }
+        }
+
+        this.setState({sceneObjects: sceneObjects});
+
+        if (this.props.onItemsRemoved) {
+            this.props.onItemsRemoved(uuidsToRemove);
         }
     }
 
     addToSceneList = (item) => {
-        this.setState(prevState => ({sceneItems: [...prevState.sceneItems, item]}))
+        this.setState(prevState => ({sceneObjects: [...prevState.sceneObjects, item]}))
     }
 
     onDeleteButtonClicked = () => {
         if (this.sceneList.current && this.sceneList.current.selectedOptions) {
-            for (let item of this.sceneList.current.selectedOptions) {
-                this.removeFromSceneList(item.value);
+            var objectsToRemove = [];
+            for (let object of this.sceneList.current.selectedOptions) {
+                objectsToRemove.push(object.value);
             }
+
+            this.removeObjectsFromScene(objectsToRemove);
         }
     }
 
@@ -56,8 +66,8 @@ export default class SideBar extends React.Component {
 
                 <form>
                     <select multiple="multiple" ref={this.sceneList}> {
-                        this.state.sceneItems.map(item => {
-                            return <SceneListItem {...item} />
+                        this.state.sceneObjects.map(object => {
+                            return <SceneListItem key={object.uuid} {...object} />
                         })
                     }
                     </select>

@@ -2,7 +2,7 @@ import React from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-import SideBar from './sidebar.js';
+import SideBar from './sidebar/sidebar.js';
 import MeshLoader from '../../utils/meshLoader.js';
 import './viewer.css';
 
@@ -51,12 +51,14 @@ export default class Viewer extends React.Component {
         this.sideBar.current.addToSceneList(mesh);
     }
 
-    removeElementFromScene = (uuid) => {
-        const object = this.scene.getObjectByProperty("uuid", uuid);
-        if (object) {
-            object.geometry.dispose();
-            object.material.dispose();
-            this.scene.remove( object );    
+    removeObjectsByUUID = (uuidsToRemove) => {
+        for (let uuid of uuidsToRemove) {
+            const object = this.scene.getObjectByProperty("uuid", uuid);
+            if (object) {
+                object.geometry.dispose();
+                object.material.dispose();
+                this.scene.remove( object );    
+            }    
         }
     }
 
@@ -88,7 +90,7 @@ export default class Viewer extends React.Component {
                 <SideBar 
                     ref={this.sideBar}
                     onFileSelected={this.onFileSelectedForUpload}
-                    onItemRemoved={this.removeElementFromScene}
+                    onItemsRemoved={this.removeObjectsByUUID}
                 />
                 <div className="window-3d noselect" ref={(mount) => { this.mount = mount }} />
             </div>
