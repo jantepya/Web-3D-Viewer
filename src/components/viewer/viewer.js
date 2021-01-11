@@ -2,6 +2,7 @@ import React from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+import { MESH_DEFAULT_COLOR, MESH_HIGHLIGHT_COLOR } from '../../config.js';
 import SideBar from './sidebar/sidebar.js';
 import MeshLoader from '../../utils/meshLoader.js';
 import './viewer.css';
@@ -10,6 +11,9 @@ export default class Viewer extends React.Component {
     constructor(){
         super()
         this.sideBar = React.createRef();
+        this.state = {
+            selectedObjects: []
+        };
     }
 
     componentDidMount() {
@@ -44,7 +48,7 @@ export default class Viewer extends React.Component {
     }
 
     addMeshToScene = (geometry, fileName) => {
-        const material = new THREE.MeshStandardMaterial( { color: 0xaaaaaa, flatShading: true } );
+        const material = new THREE.MeshStandardMaterial( { color: MESH_DEFAULT_COLOR, flatShading: true } );
         const mesh = new THREE.Mesh( geometry, material );
         mesh.name = fileName;
         this.scene.add(mesh);
@@ -60,6 +64,44 @@ export default class Viewer extends React.Component {
                 this.scene.remove( object );    
             }    
         }
+    }
+
+    setColorOfObjects = (objects, color) => {
+        for (let uuid of objects) {
+            const object = this.scene.getObjectByProperty("uuid", uuid);
+            if (object && object.material) {
+                object.material.color.setHex(color);
+            }        
+        }
+    }
+
+    onSelectionChanged = (event) => {
+        var prevSelection = [...this.state.selectedObjects];
+        var currentSelection = [];
+        var uuidsToSelect = [];
+        var uuidsToDeselect = [];
+
+        for (let selection of event.target.selectedOptions) {
+            if (selection) {
+                currentSelection.push(selection.value);
+                if (!prevSelection.includes(selection.value)) {
+                    uuidsToSelect.push(selection.value);
+                }
+            }
+        }
+
+        for (var selection of prevSelection) {
+            if (!currentSelection.includes(selection)) {
+                uuidsToDeselect.push(selection);
+            }
+        }
+
+        this.setState({
+            selectedObjects: currentSelection
+        });
+
+        this.setColorOfObjects(uuidsToDeselect, MESH_DEFAULT_COLOR);
+        this.setColorOfObjects(uuidsToSelect, MESH_HIGHLIGHT_COLOR);
     }
 
     onWindowResize = () => {
@@ -91,6 +133,7 @@ export default class Viewer extends React.Component {
                     ref={this.sideBar}
                     onFileSelected={this.onFileSelectedForUpload}
                     onItemsRemoved={this.removeObjectsByUUID}
+                    onSelectionChanged={this.onSelectionChanged}
                 />
                 <div className="window-3d noselect" ref={(mount) => { this.mount = mount }} />
             </div>

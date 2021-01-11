@@ -4,10 +4,6 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 
 import { SUPPORTED_MESH_TYPES } from '../config.js';
 
-const GetFormattedFileTypes = function () {
-
-}
-
 const GetFileTypeFromName = function(filename) {
     var type = filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
     return SUPPORTED_MESH_TYPES[type];

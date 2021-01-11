@@ -13,7 +13,7 @@ const GetSupportedFileTypes = function () {
 
 const SceneListItem = function (props) {
     return (
-        <option className="sceneListItem" value={props.uuid} onSelect={props.onSelect}>
+        <option className="sceneListItem" value={props.uuid}>
             {props.name}
         </option>
     )
@@ -49,6 +49,12 @@ export default class SideBar extends React.Component {
         this.setState(prevState => ({sceneObjects: [...prevState.sceneObjects, item]}))
     }
 
+    onSelectionChanged = (event) => {
+        if (this.props.onSelectionChanged) {
+            this.props.onSelectionChanged(event);
+        }
+    }
+
     onDeleteButtonClicked = () => {
         if (this.sceneList.current && this.sceneList.current.selectedOptions) {
             var objectsToRemove = [];
@@ -75,7 +81,7 @@ export default class SideBar extends React.Component {
                 <Button color="danger" onClick={this.onDeleteButtonClicked}>-</Button>
 
                 <form>
-                    <select multiple="multiple" ref={this.sceneList}> {
+                    <select multiple="multiple" ref={this.sceneList} onChange={this.onSelectionChanged}> {
                         this.state.sceneObjects.map(object => {
                             return <SceneListItem key={object.uuid} {...object} />
                         })
