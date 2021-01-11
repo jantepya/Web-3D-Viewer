@@ -1,0 +1,17 @@
+.viewer {
+    height: 100%;
+}
+
+.window-3d {
+    position: fixed;
+    margin-left: calc(var(--sidebar-width) + 5px);
+    height: 100%;
+    width: 100%;
+    overscroll-behavior: none;
+    background: linear-gradient(#8B8B8B, #2B2B2B);
+}
+
+canvas {
+    outline: none;
+
+}

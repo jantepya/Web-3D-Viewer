@@ -1,0 +1,12 @@
+.sidebar {
+    position: fixed;
+    z-index: 1;
+    height:100%;
+    width: var(--sidebar-width);
+    background-color: var(--color-sidebar-bg);
+    color: var(--color-header-text);
+}
+
+select {
+    width:100%;
+}
