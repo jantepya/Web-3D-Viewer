@@ -3,14 +3,6 @@ import { Button } from 'reactstrap';
 import './sidebar.css';
 import { SUPPORTED_MESH_TYPES } from '../../../config.js';
 
-const GetSupportedFileTypes = function () {
-    var result = "";
-    for (var type in SUPPORTED_MESH_TYPES) {
-        result = result + ", ." + type;
-    }
-    return result;
-}
-
 const SceneListItem = function (props) {
     return (
         <option className="sceneListItem" value={props.uuid}>
@@ -69,7 +61,6 @@ export default class SideBar extends React.Component {
     onUploadButtonClicked = () => {
         var input = document.createElement('input');
         input.type = 'file';
-        input.accept = GetSupportedFileTypes()
         input.onchange = this.props.onFileSelected;
         input.click();
     }

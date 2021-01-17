@@ -2,7 +2,8 @@
 export const SUPPORTED_MESH_TYPES = {
     "drc": 0, 
     "ply": 1, 
-    "stl": 2
+    "stl": 2,
+    "gltf": 3
 };
 
 export const MESH_DEFAULT_COLOR = 0xaaaaaa;
