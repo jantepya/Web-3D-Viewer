@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 import { MESH_DEFAULT_COLOR, MESH_HIGHLIGHT_COLOR } from '../../config.js';
 import SideBar from './sidebar/sidebar.js';
-import MeshLoader from '../../utils/meshLoader.js';
+import MeshLoader from './lib/meshLoader.js';
 import { Scene } from './lib/scene.js';
 import './viewer.css';
 

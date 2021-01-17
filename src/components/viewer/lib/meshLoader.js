@@ -2,7 +2,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
 
-import { SUPPORTED_MESH_TYPES } from '../config.js';
+import { SUPPORTED_MESH_TYPES } from '../../../config.js';
 
 const GetFileTypeFromName = function(filename) {
     var type = filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
