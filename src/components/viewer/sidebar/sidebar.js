@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import './sidebar.css';
-import { SUPPORTED_MESH_TYPES } from '../../../config.js';
 
 const SceneListItem = function (props) {
     return (
