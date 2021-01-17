@@ -1,4 +1,5 @@
 # 3D Web Viewer
 
-Todo - make readme
+Currently supports .ply, .stl, .drc
 
+https://jantepya.github.io/Web-3D-Viewer/
