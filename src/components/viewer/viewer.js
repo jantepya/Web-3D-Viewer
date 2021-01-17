@@ -12,7 +12,8 @@ export default class Viewer extends React.Component {
         super()
         this.sideBar = React.createRef();
         this.state = {
-            selectedObjects: []
+            selectedObjects: [],
+            visibleObjects: []
         };
     }
 
@@ -42,6 +43,7 @@ export default class Viewer extends React.Component {
         this.meshLoader = meshLoader;
 
         window.addEventListener( 'resize', this.onWindowResize, false );
+        window.addEventListener( 'click', this.onDocumentMouseDown, false );
 
         this.onWindowResize();
         this.animate();
@@ -53,6 +55,7 @@ export default class Viewer extends React.Component {
         mesh.name = fileName;
         this.scene.add(mesh);
         this.sideBar.current.addToSceneList(mesh);
+        this.setState(prevState => ({visibleObjects: [...prevState.visibleObjects, mesh]}))
     }
 
     removeObjectsByUUID = (uuidsToRemove) => {
@@ -62,7 +65,7 @@ export default class Viewer extends React.Component {
                 object.geometry.dispose();
                 object.material.dispose();
                 this.scene.remove( object );    
-            }    
+            }
         }
     }
 
@@ -75,41 +78,66 @@ export default class Viewer extends React.Component {
         }
     }
 
-    onSelectionChanged = (event) => {
+    setObjectsSelected = (newSelection) => {
         var prevSelection = [...this.state.selectedObjects];
-        var currentSelection = [];
         var uuidsToSelect = [];
         var uuidsToDeselect = [];
 
-        for (let selection of event.target.selectedOptions) {
-            if (selection) {
-                currentSelection.push(selection.value);
-                if (!prevSelection.includes(selection.value)) {
-                    uuidsToSelect.push(selection.value);
-                }
+        for (var selection of newSelection) {
+            if (!prevSelection.includes(selection)) {
+                uuidsToSelect.push(selection);
             }
         }
 
         for (var selection of prevSelection) {
-            if (!currentSelection.includes(selection)) {
+            if (!newSelection.includes(selection)) {
                 uuidsToDeselect.push(selection);
             }
         }
 
         this.setState({
-            selectedObjects: currentSelection
+            selectedObjects: newSelection
         });
 
         this.setColorOfObjects(uuidsToDeselect, MESH_DEFAULT_COLOR);
         this.setColorOfObjects(uuidsToSelect, MESH_HIGHLIGHT_COLOR);
     }
 
+    onSelectionChanged = (event) => {
+        var currentSelection = [];
+        for (let selection of event.target.selectedOptions) {
+            if (selection) {
+                currentSelection.push(selection.value);
+            }
+        }
+        this.setObjectsSelected(currentSelection);
+    }
+
+    onDocumentMouseDown = (event) => {
+        event.preventDefault();
+
+        var mouse = new THREE.Vector2();
+        var rect = this.renderer.domElement.getBoundingClientRect();
+        mouse.x = ( (event.clientX - rect.left) / (rect.right - rect.left) ) * 2 - 1;
+        mouse.y = -( ( event.clientY - rect.top ) / ( rect.bottom - rect.top) ) * 2 + 1;
+
+        var raycaster =  new THREE.Raycaster();                                        
+        raycaster.setFromCamera( mouse, this.camera );
+        var intersects = raycaster.intersectObjects( this.state.visibleObjects );
+
+        if ( intersects.length > 0 ) {
+            this.setObjectsSelected([ intersects[ 0 ].object.uuid ]);
+         }
+    }
+
     onWindowResize = () => {
-        let width = window.innerWidth;
-        let height = window.innerHeight;
-        this.camera.aspect = width / height;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize( width, height );
+        if (this.mount) {
+            let width = this.mount.clientWidth;
+            let height = this.mount.clientHeight;
+            this.camera.aspect = width / height;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize( width, height );
+        }
     }
 
     animate = () => {

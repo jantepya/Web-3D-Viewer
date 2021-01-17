@@ -15,7 +15,10 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Navbar />
-      <Viewer />
+
+      <div id="content">
+        <Viewer />
+      </div>
     </Router>
 
   </React.StrictMode>,

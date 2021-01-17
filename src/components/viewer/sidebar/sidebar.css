@@ -1,8 +1,8 @@
 .sidebar {
-    position: fixed;
-    z-index: 1;
     height:100%;
     width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    margin-right:5px;
     background-color: var(--color-sidebar-bg);
     color: var(--color-header-text);
 }

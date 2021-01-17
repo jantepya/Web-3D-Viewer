@@ -1,17 +1,17 @@
 .viewer {
     height: 100%;
+    display: flex;
 }
 
 .window-3d {
-    position: fixed;
-    margin-left: calc(var(--sidebar-width) + 5px);
     height: 100%;
-    width: 100%;
+    width: calc(100% - var(--sidebar-width) + 5px);
     overscroll-behavior: none;
     background: linear-gradient(#8B8B8B, #2B2B2B);
 }
 
 canvas {
     outline: none;
-
+    width: 100%;
+    height: 100%;
 }
