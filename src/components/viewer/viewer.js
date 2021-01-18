@@ -13,14 +13,21 @@ const STATUS_TYPE = {
     "Error": 2
 }
 
+class ObjectInfo {
+    constructor(name) {
+        this.selected = false;
+        this.visible = false;
+        this.name = name;
+    }
+}
+
 export default class Viewer extends React.Component {
     constructor(){
         super()
         this.sideBar = React.createRef();
         this.state = {
             status: null,
-            selectedObjects: [],
-            visibleObjects: []
+            sceneObjects: {}
         };
     }
 
@@ -43,14 +50,18 @@ export default class Viewer extends React.Component {
         const mesh = new THREE.Mesh( geometry, material );
         mesh.name = fileName;
         this.scene.meshRoot.add(mesh);
-        this.sideBar.current.addToSceneList(mesh);
-        this.setState(prevState => ({
-            visibleObjects: [...prevState.visibleObjects, mesh],
+
+        var info = new ObjectInfo(fileName);
+        var uuid = mesh.uuid;
+        const sceneObjects = { ...this.state.sceneObjects, [uuid] : info };
+
+        this.setState({
+            sceneObjects: sceneObjects,
             status: {
                 type: STATUS_TYPE.Info,
                 message: "Loaded: " + fileName
             }
-        }));
+        });
     }
 
     onLoadError = (error) => {
@@ -69,41 +80,47 @@ export default class Viewer extends React.Component {
 
     onObjectsRemoved = (uuids) => {
         this.scene.removeObjectsByUUID(uuids);
+
+        const sceneObjects = {...this.state.sceneObjects};
+
+        for (let uuid of uuids) {
+            delete sceneObjects[uuid];
+        }
+
+        this.setState({
+            sceneObjects: sceneObjects
+        });
     }
 
     setObjectsSelected = (newSelection) => {
-        var prevSelection = [...this.state.selectedObjects];
+        const sceneObjects = this.state.sceneObjects;
         var uuidsToSelect = [];
         var uuidsToDeselect = [];
 
         for (let selection of newSelection) {
-            if (!prevSelection.includes(selection)) {
+            if (selection in sceneObjects && !sceneObjects[selection].selected) {
                 uuidsToSelect.push(selection);
             }
         }
 
-        for (let selection of prevSelection) {
-            if (!newSelection.includes(selection)) {
-                uuidsToDeselect.push(selection);
+        Object.keys(sceneObjects).forEach((key) => {
+            if (newSelection.includes(key)) {
+                sceneObjects[key].selected = true;
             }
-        }
+            else {
+                if (sceneObjects[key].selected) {
+                    uuidsToDeselect.push(key);
+                }
+                sceneObjects[key].selected = false;
+            }
+        });
 
         this.setState({
-            selectedObjects: newSelection
+            selectedObjects: sceneObjects
         });
 
         this.scene.setColorOfObjects(uuidsToDeselect, MESH_DEFAULT_COLOR);
         this.scene.setColorOfObjects(uuidsToSelect, MESH_HIGHLIGHT_COLOR);
-    }
-
-    onSelectionChanged = (event) => {
-        var currentSelection = [];
-        for (let selection of event.target.selectedOptions) {
-            if (selection) {
-                currentSelection.push(selection.value);
-            }
-        }
-        this.setObjectsSelected(currentSelection);
     }
 
     onWindowResize = () => {
@@ -131,8 +148,8 @@ export default class Viewer extends React.Component {
                 <SideBar 
                     ref={this.sideBar}
                     onFileSelected={this.onFileSelectedForUpload}
-                    onItemsRemoved={this.onObjectsRemoved}
-                    onSelectionChanged={this.onSelectionChanged}
+                    onSelectionChanged={this.setObjectsSelected}
+                    sceneObjects={this.state.sceneObjects}
                 />
                 <div className="window-3d noselect" ref={(mount) => { this.mount = mount }}>
                     { this.state.status?.message &&

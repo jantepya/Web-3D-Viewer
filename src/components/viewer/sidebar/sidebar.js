@@ -4,7 +4,7 @@ import './sidebar.css';
 
 const SceneListItem = function (props) {
     return (
-        <option className="sceneListItem" value={props.uuid}>
+        <option className="sceneListItem" value={props.uuid} selected={props.selected}>
             {props.name}
         </option>
     )
@@ -14,35 +14,18 @@ export default class SideBar extends React.Component {
     constructor() {
         super()
         this.sceneList = React.createRef();
-        this.state = {
-            sceneObjects: []
-        }
-    }
-
-    removeObjectsFromScene = (uuidsToRemove) => {
-        var sceneObjects = [...this.state.sceneObjects];
-
-        for (let uuid of uuidsToRemove) {
-            var index = sceneObjects.findIndex((object) => object.uuid === uuid)
-            if (index !== -1) {
-                sceneObjects.splice(index, 1);
-            }
-        }
-
-        this.setState({sceneObjects: sceneObjects});
-
-        if (this.props.onItemsRemoved) {
-            this.props.onItemsRemoved(uuidsToRemove);
-        }
-    }
-
-    addToSceneList = (item) => {
-        this.setState(prevState => ({sceneObjects: [...prevState.sceneObjects, item]}))
     }
 
     onSelectionChanged = (event) => {
+        var currentSelection = [];
+        for (let selection of event.target.selectedOptions) {
+            if (selection) {
+                currentSelection.push(selection.value);
+            }
+        }
+        
         if (this.props.onSelectionChanged) {
-            this.props.onSelectionChanged(event);
+            this.props.onSelectionChanged(currentSelection);
         }
     }
 
@@ -53,7 +36,9 @@ export default class SideBar extends React.Component {
                 objectsToRemove.push(object.value);
             }
 
-            this.removeObjectsFromScene(objectsToRemove);
+            if (this.props.onItemsRemoved) {
+                this.props.onItemsRemoved(objectsToRemove);
+            }    
         }
     }
 
@@ -72,8 +57,8 @@ export default class SideBar extends React.Component {
 
                 <form>
                     <select multiple="multiple" ref={this.sceneList} onChange={this.onSelectionChanged}> {
-                        this.state.sceneObjects.map(object => {
-                            return <SceneListItem key={object.uuid} {...object} />
+                        Object.entries(this.props.sceneObjects).map(([key, value]) => {
+                            return <SceneListItem key={key} uuid={key} {...value} />
                         })
                     }
                     </select>
