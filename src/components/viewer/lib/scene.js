@@ -74,6 +74,15 @@ export class Scene extends THREE.EventDispatcher {
         }
     }
 
+    setVisibilityOfObjects = (uuids, isVisible) => {
+        for (let uuid of uuids) {
+            const object = this.scene.getObjectByProperty("uuid", uuid);
+            if (object) {
+                object.visible = isVisible;
+            }        
+        }
+    }
+
     resize(width, height) {
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();

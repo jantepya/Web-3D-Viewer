@@ -1,12 +1,35 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import './sidebar.css';
+import './sceneList.css';
 
 const SceneListItem = function (props) {
     return (
-        <option className="sceneListItem" value={props.uuid} selected={props.selected}>
-            {props.name}
-        </option>
+        <li className={"sceneListItem " + (props.selected ? "selected" : "")} value={props.uuid}>
+            <div>
+                <label>
+                    <input 
+                        type="checkbox" 
+                        className="visibiltyCheckbox" 
+                        id={"v" + props.uuid} value={props.uuid} 
+                        defaultChecked={props.visible}
+                        onChange={props.onVisibleChanged}
+                    />
+                </label>
+            </div>
+            <div>
+                <span>{props.name}</span>
+                <label className="selectionLabel">
+                    <input 
+                        type="checkbox"
+                        className="selectionCheckbox" 
+                        value={props.uuid} 
+                        defaultChecked={props.selected}
+                        onChange={props.onSelectionChanged}
+                    />
+                </label>
+            </div>
+        </li>
     )
 }
 
@@ -17,15 +40,14 @@ export default class SideBar extends React.Component {
     }
 
     onSelectionChanged = (event) => {
-        var currentSelection = [];
-        for (let selection of event.target.selectedOptions) {
-            if (selection) {
-                currentSelection.push(selection.value);
-            }
-        }
-        
         if (this.props.onSelectionChanged) {
-            this.props.onSelectionChanged(currentSelection);
+            this.props.onSelectionChanged([event.target.value]);
+        }
+    }
+
+    onVisibleChanged = (event) => {
+        if (this.props.onVisibilityToggled) {
+            this.props.onVisibilityToggled([event.target.value], event.target.checked);
         }
     }
 
@@ -55,14 +77,17 @@ export default class SideBar extends React.Component {
                 <Button color="primary" onClick={this.onUploadButtonClicked}>+</Button>
                 <Button color="danger" onClick={this.onDeleteButtonClicked}>-</Button>
 
-                <form>
-                    <select multiple="multiple" ref={this.sceneList} onChange={this.onSelectionChanged}> {
-                        Object.entries(this.props.sceneObjects).map(([key, value]) => {
-                            return <SceneListItem key={key} uuid={key} {...value} />
-                        })
-                    }
-                    </select>
-                </form>
+                <ul ref={this.sceneList} className="sceneList"> {
+                    Object.entries(this.props.sceneObjects).map(([key, value]) => {
+                        return <SceneListItem 
+                        key={key} 
+                        uuid={key} 
+                        onSelectionChanged={this.onSelectionChanged}
+                        onVisibleChanged={this.onVisibleChanged}
+                        {...value} />
+                    })
+                }
+                </ul>
             </div>
         )
     }   

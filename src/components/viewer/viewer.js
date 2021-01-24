@@ -16,7 +16,7 @@ const STATUS_TYPE = {
 class ObjectInfo {
     constructor(name) {
         this.selected = false;
-        this.visible = false;
+        this.visible = true;
         this.name = name;
     }
 }
@@ -123,6 +123,19 @@ export default class Viewer extends React.Component {
         this.scene.setColorOfObjects(uuidsToSelect, MESH_HIGHLIGHT_COLOR);
     }
 
+    setObjectsVisibility = (uuids, isVisible) => {
+        const sceneObjects = this.state.sceneObjects;
+        Object.keys(sceneObjects).forEach((key) => {
+            sceneObjects[key].visible = isVisible;
+        });
+
+        this.setState({
+            selectedObjects: sceneObjects
+        });
+
+        this.scene.setVisibilityOfObjects(uuids, isVisible);
+    }
+
     onWindowResize = () => {
         if (this.mount) {
             let width = this.mount.clientWidth;
@@ -149,6 +162,7 @@ export default class Viewer extends React.Component {
                     ref={this.sideBar}
                     onFileSelected={this.onFileSelectedForUpload}
                     onSelectionChanged={this.setObjectsSelected}
+                    onVisibilityToggled={this.setObjectsVisibility}
                     sceneObjects={this.state.sceneObjects}
                 />
                 <div className="window-3d noselect" ref={(mount) => { this.mount = mount }}>

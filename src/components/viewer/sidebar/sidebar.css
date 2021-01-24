@@ -2,11 +2,12 @@
     height:100%;
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
-    margin-right:5px;
+    margin-right: var(--sidebar-margin-right);
     background-color: var(--color-sidebar-bg);
     color: var(--color-header-text);
 }
 
-select {
-    width:100%;
+ul {
+    list-style-type: none;
+    padding-inline-start: 0px;
 }

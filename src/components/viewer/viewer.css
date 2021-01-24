@@ -5,7 +5,7 @@
 
 .window-3d {
     height: 100%;
-    width: calc(100% - var(--sidebar-width) + 5px);
+    width: calc(100% - var(--sidebar-width) + var(--sidebar-margin-right));
     overscroll-behavior: none;
     background: linear-gradient(#8B8B8B, #2B2B2B);
 }
