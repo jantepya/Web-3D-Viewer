@@ -87,11 +87,13 @@ export class Scene extends THREE.EventDispatcher {
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize( width, height );
+        this.controls.handleResize();
     }
 
     animate = () => {
-        this.render();
         requestAnimationFrame( this.animate );
+        this.controls.update();
+        this.render();
     }
 
     render() {
