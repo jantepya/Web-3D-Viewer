@@ -162,6 +162,7 @@ export default class Viewer extends React.Component {
                     ref={this.sideBar}
                     onFileSelected={this.onFileSelectedForUpload}
                     onSelectionChanged={this.setObjectsSelected}
+                    onObjectsRemoved={this.onObjectsRemoved}
                     onVisibilityToggled={this.setObjectsVisibility}
                     sceneObjects={this.state.sceneObjects}
                 />

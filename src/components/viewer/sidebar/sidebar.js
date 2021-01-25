@@ -52,14 +52,19 @@ export default class SideBar extends React.Component {
     }
 
     onDeleteButtonClicked = () => {
-        if (this.sceneList.current && this.sceneList.current.selectedOptions) {
+        if (this.sceneList.current) {
+        
+            var selectElements = this.sceneList.current.getElementsByClassName("selectionCheckbox");
             var objectsToRemove = [];
-            for (let object of this.sceneList.current.selectedOptions) {
-                objectsToRemove.push(object.value);
+
+            for (let checkbox of selectElements) {
+                if (checkbox.checked) {
+                    objectsToRemove.push(checkbox.value);
+                }
             }
 
-            if (this.props.onItemsRemoved) {
-                this.props.onItemsRemoved(objectsToRemove);
+            if (this.props.onObjectsRemoved) {
+                this.props.onObjectsRemoved(objectsToRemove);
             }    
         }
     }
