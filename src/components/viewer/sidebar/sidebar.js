@@ -5,13 +5,13 @@ import './sceneList.css';
 
 const SceneListItem = function (props) {
     return (
-        <li className={"sceneListItem " + (props.selected ? "selected" : "")} value={props.uuid}>
+        <li className={"sceneListItem " + (props.selected ? "selected" : "")} id={props.uuid}>
             <div>
                 <label>
                     <input 
                         type="checkbox" 
                         className="visibiltyCheckbox" 
-                        id={"v" + props.uuid} value={props.uuid} 
+                        value={props.uuid} 
                         defaultChecked={props.visible}
                         onChange={props.onVisibleChanged}
                     />
@@ -21,11 +21,10 @@ const SceneListItem = function (props) {
                 <span>{props.name}</span>
                 <label className="selectionLabel">
                     <input 
-                        type="checkbox"
-                        className="selectionCheckbox" 
+                        type="button"
+                        className="selectionInput" 
                         value={props.uuid} 
-                        defaultChecked={props.selected}
-                        onChange={props.onSelectionChanged}
+                        onClick={props.onSelectionChanged}
                     />
                 </label>
             </div>
@@ -54,13 +53,11 @@ export default class SideBar extends React.Component {
     onDeleteButtonClicked = () => {
         if (this.sceneList.current) {
         
-            var selectElements = this.sceneList.current.getElementsByClassName("selectionCheckbox");
+            var selectElements = this.sceneList.current.getElementsByClassName("selected");
             var objectsToRemove = [];
 
-            for (let checkbox of selectElements) {
-                if (checkbox.checked) {
-                    objectsToRemove.push(checkbox.value);
-                }
+            for (let element of selectElements) {
+                objectsToRemove.push(element.id);
             }
 
             if (this.props.onObjectsRemoved) {
