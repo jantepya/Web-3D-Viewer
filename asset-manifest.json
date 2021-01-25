@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/Web-3D-Viewer/static/css/main.73d1317d.chunk.css",
-    "main.js": "/Web-3D-Viewer/static/js/main.40b0118e.chunk.js",
-    "main.js.map": "/Web-3D-Viewer/static/js/main.40b0118e.chunk.js.map",
+    "main.css": "/Web-3D-Viewer/static/css/main.a75294aa.chunk.css",
+    "main.js": "/Web-3D-Viewer/static/js/main.acd68e4d.chunk.js",
+    "main.js.map": "/Web-3D-Viewer/static/js/main.acd68e4d.chunk.js.map",
     "runtime-main.js": "/Web-3D-Viewer/static/js/runtime-main.9ce141b5.js",
     "runtime-main.js.map": "/Web-3D-Viewer/static/js/runtime-main.9ce141b5.js.map",
-    "static/js/2.1fa4fc53.chunk.js": "/Web-3D-Viewer/static/js/2.1fa4fc53.chunk.js",
-    "static/js/2.1fa4fc53.chunk.js.map": "/Web-3D-Viewer/static/js/2.1fa4fc53.chunk.js.map",
+    "static/js/2.c5038a36.chunk.js": "/Web-3D-Viewer/static/js/2.c5038a36.chunk.js",
+    "static/js/2.c5038a36.chunk.js.map": "/Web-3D-Viewer/static/js/2.c5038a36.chunk.js.map",
     "static/js/3.318a0e2f.chunk.js": "/Web-3D-Viewer/static/js/3.318a0e2f.chunk.js",
     "static/js/3.318a0e2f.chunk.js.map": "/Web-3D-Viewer/static/js/3.318a0e2f.chunk.js.map",
     "index.html": "/Web-3D-Viewer/index.html",
-    "static/css/main.73d1317d.chunk.css.map": "/Web-3D-Viewer/static/css/main.73d1317d.chunk.css.map",
-    "static/js/2.1fa4fc53.chunk.js.LICENSE.txt": "/Web-3D-Viewer/static/js/2.1fa4fc53.chunk.js.LICENSE.txt"
+    "static/css/main.a75294aa.chunk.css.map": "/Web-3D-Viewer/static/css/main.a75294aa.chunk.css.map",
+    "static/js/2.c5038a36.chunk.js.LICENSE.txt": "/Web-3D-Viewer/static/js/2.c5038a36.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.9ce141b5.js",
-    "static/js/2.1fa4fc53.chunk.js",
-    "static/css/main.73d1317d.chunk.css",
-    "static/js/main.40b0118e.chunk.js"
+    "static/js/2.c5038a36.chunk.js",
+    "static/css/main.a75294aa.chunk.css",
+    "static/js/main.acd68e4d.chunk.js"
   ]
 }
