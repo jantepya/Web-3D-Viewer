@@ -6,6 +6,7 @@
     height: 300px;
     border: 1px solid var(--color-input-border);
     border-radius: 6px;
+    overflow-y: auto;
 }
 
 .sceneListItem {
@@ -39,7 +40,7 @@
 .selectionLabel {
     cursor: pointer;
     position: absolute;
-    width: 100%;
+    width: calc(100% - 42px);
     display: block;
     top: 0;
 }
