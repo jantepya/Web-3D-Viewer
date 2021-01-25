@@ -47,7 +47,7 @@ export class Scene extends THREE.EventDispatcher {
         raycaster.setFromCamera( mouse, this.camera );
         var intersects = raycaster.intersectObjects( this.meshRoot.children );
 
-        var selection = intersects.length > 0 ? [intersects[0].object.uuid] : [];
+        var selection = intersects.length > 0 ? [intersects[intersects.length - 1].object.uuid] : [];
         this.dispatchEvent({
             type: SceneEvent.selectionChanged,
             selection: selection
